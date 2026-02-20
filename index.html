@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; } /* slate-950 base */
         .chart-container {
             position: relative;
             width: 100%;
@@ -26,222 +26,228 @@
             .chart-container { height: 300px; }
         }
         .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(15, 23, 42, 0.8); /* slate-900 with opacity */
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .gradient-text {
-            background: linear-gradient(to right, #10b981, #059669);
+        .gold-gradient-text {
+            background: linear-gradient(to right, #facc15, #ca8a04);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .gold-glow {
+            box-shadow: 0 0 25px rgba(234, 179, 8, 0.3);
+        }
         /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #eab308; }
     </style>
     
-    <!-- Chosen Palette: Slate & Emerald -->
+    <!-- Chosen Palette: Dark Slate & Gold -->
     <!-- Application Structure Plan: 
-         1. Hero: Strong consumer value proposition (Beat the house with AI).
-         2. How it Works: 3 simple steps explaining the "Vegas vs Model" concept.
-         3. Interactive Demo: The core app simulation showing the simplicity of the interface.
-         4. Performance Track Record: A Chart.js line chart simulating historical ROI/Units won (Crucial for consumer trust).
+         1. Hero: Strong consumer value proposition (Beat the house with AI), dark theme established.
+         2. How it Works: 3 simple steps explaining the "Vegas vs Model" concept with gold accents.
+         3. Interactive Demo: The core app simulation, updated to a sleek dark mode UI.
+         4. Performance Track Record: A Chart.js line chart simulating historical ROI/Units won.
          5. Sports/Roadmap: Visual grid of what's available now and what's coming.
-         6. Pricing: Clean, simple subscription model ($25/mo).
+         6. Pricing: 2-tier side-by-side layout ($25/mo single vs $100/mo all-access).
     -->
     
     <!-- Visualization & Content Choices:
-         1. Performance History -> Goal: Build Trust -> Method: Line Chart (Chart.js) -> Interaction: Hover for exact unit gains -> Shows the consumer why they should pay $25/mo.
+         1. Performance History -> Goal: Build Trust -> Method: Line Chart (Chart.js) -> Interaction: Hover for exact unit gains. Now uses gold styling to match the dark theme.
          2. Product Logic -> Goal: Demo -> Method: Custom JS Calculator -> Interaction: Sliders for "Vegas Line" -> Demonstrates the "1:1 Model to Expectation" concept dynamically.
          CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
     -->
 </head>
-<body class="antialiased">
+<body class="antialiased selection:bg-yellow-500 selection:text-slate-900">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-panel border-b border-slate-200 shadow-sm transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 glass-panel transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="scrollToSection('hero')">
                     <span class="text-3xl">🎲</span>
-                    <span class="font-bold text-xl tracking-tight text-slate-800">Better Bettor</span>
+                    <span class="font-bold text-xl tracking-tight text-white"><span class="text-yellow-400">Better</span> Bettor</span>
                 </div>
                 <div class="hidden md:flex space-x-8 items-center">
-                    <button onclick="scrollToSection('features')" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">How it Works</button>
-                    <button onclick="scrollToSection('demo')" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Live Demo</button>
-                    <button onclick="scrollToSection('performance')" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Performance</button>
-                    <button onclick="scrollToSection('pricing')" class="bg-emerald-600 text-white px-5 py-2 rounded-full font-bold hover:bg-emerald-700 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200">Get Started</button>
+                    <button onclick="scrollToSection('features')" class="text-slate-300 hover:text-yellow-400 font-medium transition-colors">How it Works</button>
+                    <button onclick="scrollToSection('demo')" class="text-slate-300 hover:text-yellow-400 font-medium transition-colors">Live Demo</button>
+                    <button onclick="scrollToSection('performance')" class="text-slate-300 hover:text-yellow-400 font-medium transition-colors">Performance</button>
+                    <button onclick="scrollToSection('pricing')" class="bg-yellow-500 text-slate-900 px-5 py-2 rounded-full font-bold hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20 transform hover:-translate-y-0.5 duration-200">Get Started</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="hero" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div class="absolute inset-0 bg-slate-900 z-0">
+    <section id="hero" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-950">
+        <div class="absolute inset-0 z-0">
             <!-- Subtle background pattern using CSS radial gradients -->
-            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 30px 30px;"></div>
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#facc15 1px, transparent 1px); background-size: 30px 30px;"></div>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-96 bg-yellow-500/10 blur-[100px] rounded-full pointer-events-none"></div>
         </div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-block mb-4 px-4 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-semibold text-sm tracking-wide uppercase">
+            <div class="inline-block mb-6 px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 font-semibold text-xs tracking-widest uppercase">
                 Now Live for NCAA Men's Basketball
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 leading-tight">
                 Stop Guessing. <br>
-                <span class="text-emerald-400">Start Winning.</span>
+                <span class="gold-gradient-text">Start Winning.</span>
             </h1>
-            <p class="mt-4 text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
+            <p class="mt-4 text-xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed">
                 The house uses advanced analytics to set the lines. We put that same AI power in your pocket. No spreadsheets, no complex math—just clear, actionable edges.
             </p>
             <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-                <button onclick="scrollToSection('pricing')" class="px-8 py-4 text-lg font-bold rounded-full text-slate-900 bg-emerald-400 hover:bg-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all transform hover:scale-105">
+                <button onclick="scrollToSection('pricing')" class="px-8 py-4 text-lg font-bold rounded-full text-slate-950 bg-yellow-400 hover:bg-yellow-300 gold-glow transition-all transform hover:scale-105">
                     Unlock Premium Picks
                 </button>
-                <button onclick="scrollToSection('demo')" class="px-8 py-4 text-lg font-bold rounded-full text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-all">
+                <button onclick="scrollToSection('demo')" class="px-8 py-4 text-lg font-bold rounded-full text-white bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:border-slate-500 transition-all">
                     Try the Free Demo
                 </button>
             </div>
             
-            <div class="mt-16 flex justify-center items-center gap-8 text-slate-400 text-sm font-medium">
-                <div class="flex items-center gap-2"><span class="text-emerald-400 text-xl">✓</span> Deterministic Models</div>
-                <div class="flex items-center gap-2"><span class="text-emerald-400 text-xl">✓</span> 1:1 Expectation</div>
-                <div class="flex items-center gap-2"><span class="text-emerald-400 text-xl">✓</span> Cancel Anytime</div>
+            <div class="mt-16 flex justify-center items-center gap-6 md:gap-12 text-slate-400 text-sm font-medium flex-wrap">
+                <div class="flex items-center gap-2"><span class="text-yellow-500 text-xl">✓</span> Deterministic Models</div>
+                <div class="flex items-center gap-2"><span class="text-yellow-500 text-xl">✓</span> 1:1 Expectation</div>
+                <div class="flex items-center gap-2"><span class="text-yellow-500 text-xl">✓</span> Cancel Anytime</div>
             </div>
         </div>
         
         <!-- Angle bottom edge -->
-        <div class="absolute bottom-0 left-0 right-0 h-16 bg-white" style="clip-path: polygon(0 100%, 100% 100%, 100% 0);"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-16 bg-slate-900" style="clip-path: polygon(0 100%, 100% 100%, 100% 0);"></div>
     </section>
 
     <!-- How it Works Section -->
-    <section id="features" class="py-20 bg-white">
+    <section id="features" class="py-20 bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-emerald-600 font-bold tracking-wide uppercase text-sm mb-2">The Methodology</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Complexity, Simplified.</h3>
-                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">Most sports analytics tools require a statistics degree. We did the hard math so you don't have to.</p>
+                <h2 class="text-yellow-500 font-bold tracking-widest uppercase text-xs mb-3">The Methodology</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-white">Complexity, Simplified.</h3>
+                <p class="mt-4 text-lg text-slate-400 max-w-2xl mx-auto">Most sports analytics tools require a statistics degree. We did the hard math so you don't have to.</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-10">
+            <div class="grid md:grid-cols-3 gap-8">
                 <!-- Step 1 -->
-                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:border-emerald-200 transition-colors shadow-sm text-center">
-                    <div class="w-16 h-16 mx-auto bg-slate-200 rounded-full flex items-center justify-center text-2xl font-black text-slate-600 mb-6">1</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">We Crunch the Data</h4>
-                    <p class="text-slate-600">Our proprietary AI and machine learning models process thousands of data points, simulating the game environment.</p>
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-slate-700 hover:border-yellow-500/50 transition-colors text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-16 h-16 mx-auto bg-slate-950 rounded-full border border-slate-700 flex items-center justify-center text-2xl font-black text-slate-400 mb-6 group-hover:text-yellow-400 group-hover:border-yellow-500/50 transition-colors">1</div>
+                    <h4 class="text-xl font-bold text-white mb-3">We Crunch the Data</h4>
+                    <p class="text-slate-400">Our proprietary AI and machine learning models process thousands of data points, simulating the game environment.</p>
                 </div>
                 <!-- Step 2 -->
-                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:border-emerald-200 transition-colors shadow-sm text-center">
-                    <div class="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center text-2xl font-black text-emerald-600 mb-6">2</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Generate the True Spread</h4>
-                    <p class="text-slate-600">The model outputs a 1:1 expected outcome. If Vegas says -3.5, our model tells you exactly what <i>we</i> think the spread should be.</p>
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-slate-700 hover:border-yellow-500/50 transition-colors text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-16 h-16 mx-auto bg-slate-950 rounded-full border border-slate-700 flex items-center justify-center text-2xl font-black text-slate-400 mb-6 group-hover:text-yellow-400 group-hover:border-yellow-500/50 transition-colors">2</div>
+                    <h4 class="text-xl font-bold text-white mb-3">Generate the Spread</h4>
+                    <p class="text-slate-400">The model outputs a 1:1 expected outcome. If Vegas says -3.5, our model tells you exactly what <i>we</i> think the spread should be.</p>
                 </div>
                 <!-- Step 3 -->
-                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:border-emerald-200 transition-colors shadow-sm text-center relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">THE EDGE</div>
-                    <div class="w-16 h-16 mx-auto bg-slate-900 rounded-full flex items-center justify-center text-2xl font-black text-white mb-6">3</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Find the Disparity</h4>
-                    <p class="text-slate-600">When our "True Spread" differs significantly from the Vegas line, we highlight the edge. You place the bet.</p>
+                <div class="bg-slate-800/80 rounded-2xl p-8 border border-yellow-500/30 shadow-[0_0_30px_rgba(234,179,8,0.05)] text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-yellow-500 text-slate-950 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">The Edge</div>
+                    <div class="w-16 h-16 mx-auto bg-yellow-500 rounded-full flex items-center justify-center text-2xl font-black text-slate-950 mb-6 shadow-lg shadow-yellow-500/30">3</div>
+                    <h4 class="text-xl font-bold text-white mb-3">Find the Disparity</h4>
+                    <p class="text-slate-300">When our "True Spread" differs significantly from the Vegas line, we highlight the edge. You place the bet.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Product Demo Section -->
-    <section id="demo" class="py-24 bg-slate-900 text-white relative">
+    <section id="demo" class="py-24 bg-slate-950 relative border-y border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 
                 <!-- Demo Context -->
                 <div>
-                    <h2 class="text-emerald-400 font-bold tracking-wide uppercase text-sm mb-2">Interactive Preview</h2>
+                    <h2 class="text-yellow-500 font-bold tracking-widest uppercase text-xs mb-3">Interactive Preview</h2>
                     <h3 class="text-3xl md:text-5xl font-extrabold text-white mb-6">See the Edge in Action.</h3>
-                    <p class="text-lg text-slate-300 mb-8">
+                    <p class="text-lg text-slate-400 mb-8">
                         Adjust the Vegas Spread below to see how our model reacts. When the gap between the bookmaker's expectation and our model's reality grows, so does your opportunity.
                     </p>
                     
                     <div class="space-y-6">
-                        <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700">
-                            <label class="block text-sm font-medium text-slate-300 mb-3">1. Select a Matchup</label>
-                            <select id="matchupSelector" class="w-full bg-slate-900 border border-slate-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-lg appearance-none">
+                        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-inner">
+                            <label class="block text-sm font-medium text-slate-300 mb-3 uppercase tracking-wider text-xs">1. Select a Matchup</label>
+                            <select id="matchupSelector" class="w-full bg-slate-950 border border-slate-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 text-lg appearance-none cursor-pointer">
                                 <option value="duke_unc">🏀 Duke vs. UNC</option>
                                 <option value="ku_baylor">🏀 Kansas vs. Baylor</option>
                                 <option value="gonzaga_ucla">🏀 Gonzaga vs. UCLA</option>
                             </select>
                         </div>
 
-                        <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700">
-                            <label class="block text-sm font-medium text-slate-300 mb-3">2. Move the Vegas Line</label>
-                            <input type="range" id="spreadSlider" min="-15" max="15" step="0.5" value="-3.5" class="w-full h-3 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500">
-                            <div class="flex justify-between text-sm text-slate-400 mt-3 font-medium">
+                        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-inner">
+                            <label class="block text-sm font-medium text-slate-300 mb-3 uppercase tracking-wider text-xs">2. Move the Vegas Line</label>
+                            <input type="range" id="spreadSlider" min="-15" max="15" step="0.5" value="-3.5" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-yellow-500">
+                            <div class="flex justify-between text-xs text-slate-500 mt-4 font-medium uppercase tracking-wider">
                                 <span>Favorite (-15)</span>
-                                <span id="spreadValueDisplay" class="text-white bg-slate-700 px-3 py-1 rounded-md">-3.5</span>
+                                <span id="spreadValueDisplay" class="text-yellow-400 bg-slate-950 border border-slate-800 px-3 py-1 rounded-md text-sm font-bold">-3.5</span>
                                 <span>Underdog (+15)</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- App Display / Phone Mockup -->
+                <!-- App Display / Phone Mockup (Dark Mode) -->
                 <div class="flex justify-center">
-                    <div class="w-full max-w-sm bg-white rounded-[2.5rem] p-2 shadow-[0_0_50px_rgba(16,185,129,0.2)] border-4 border-slate-800 relative">
+                    <div class="w-full max-w-sm bg-slate-800 rounded-[2.5rem] p-2 shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-slate-700 relative">
                         <!-- Phone Notch -->
-                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-3xl z-10"></div>
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-3xl z-10 border-b border-x border-slate-700"></div>
                         
                         <!-- Screen -->
-                        <div class="bg-slate-50 w-full h-full rounded-[2rem] overflow-hidden flex flex-col pt-8 pb-4">
+                        <div class="bg-slate-950 w-full h-full rounded-[2rem] overflow-hidden flex flex-col pt-8 pb-4 border border-slate-900">
                             
-                            <div class="px-6 pb-4 border-b border-slate-200">
-                                <div class="text-center font-black text-slate-800 text-xl tracking-tight">BETTER BETTOR</div>
-                                <div class="text-center text-xs text-emerald-600 font-bold uppercase tracking-widest mt-1">NCAA Engine</div>
+                            <div class="px-6 pb-4 border-b border-slate-800">
+                                <div class="text-center font-black text-white text-xl tracking-tight">BETTER BETTOR</div>
+                                <div class="text-center text-[10px] text-yellow-500 font-bold uppercase tracking-widest mt-1">NCAA Engine</div>
                             </div>
 
                             <div class="flex-grow p-6 flex flex-col justify-center space-y-8">
                                 <!-- Teams -->
                                 <div class="flex justify-between items-center">
                                     <div class="text-center w-2/5">
-                                        <div class="text-2xl font-black text-slate-800 truncate" id="team1Name">Duke</div>
-                                        <div class="text-xs text-slate-500 mt-1">AWAY</div>
+                                        <div class="text-2xl font-black text-white truncate" id="team1Name">Duke</div>
+                                        <div class="text-[10px] text-slate-500 mt-1 uppercase tracking-widest font-bold">Away</div>
                                     </div>
-                                    <div class="text-sm font-bold text-slate-300 bg-slate-100 rounded-full w-8 h-8 flex items-center justify-center">VS</div>
+                                    <div class="text-xs font-bold text-slate-600 bg-slate-900 border border-slate-800 rounded-full w-8 h-8 flex items-center justify-center">VS</div>
                                     <div class="text-center w-2/5">
-                                        <div class="text-2xl font-black text-slate-800 truncate" id="team2Name">UNC</div>
-                                        <div class="text-xs text-slate-500 mt-1">HOME</div>
+                                        <div class="text-2xl font-black text-white truncate" id="team2Name">UNC</div>
+                                        <div class="text-[10px] text-slate-500 mt-1 uppercase tracking-widest font-bold">Home</div>
                                     </div>
                                 </div>
 
                                 <!-- Spreads -->
-                                <div class="bg-slate-900 rounded-2xl p-5 text-white relative shadow-lg">
+                                <div class="bg-slate-900 rounded-2xl p-5 text-white relative border border-slate-800 shadow-inner">
                                     <div class="flex justify-between items-center mb-4">
-                                        <span class="text-sm text-slate-400 font-medium">Vegas Line</span>
-                                        <span class="text-2xl font-bold" id="displayVegas">-3.5</span>
+                                        <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Vegas Line</span>
+                                        <span class="text-2xl font-bold text-slate-200" id="displayVegas">-3.5</span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-sm text-emerald-400 font-bold flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span class="text-xs text-yellow-400 font-bold flex items-center gap-2 uppercase tracking-wider">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse"></span>
                                             Our Model
                                         </span>
-                                        <span class="text-2xl font-black text-emerald-400" id="displayModel">-6.2</span>
+                                        <span class="text-2xl font-black text-yellow-400" id="displayModel">-6.2</span>
                                     </div>
                                 </div>
 
                                 <!-- Recommendation -->
                                 <div class="text-center">
-                                    <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-3">System Recommendation</p>
-                                    <div id="recommendationBadge" class="inline-block w-full py-4 rounded-xl font-black text-xl shadow-sm border transition-all duration-300">
+                                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-3">System Recommendation</p>
+                                    <div id="recommendationBadge" class="inline-block w-full py-4 rounded-xl font-black text-xl border transition-all duration-300">
                                         BET DUKE -3.5
                                     </div>
-                                    <div class="mt-4 inline-flex items-center justify-center bg-slate-100 rounded-full px-4 py-1.5">
-                                        <span class="text-xl mr-2" id="edgeIcon">🔥</span>
-                                        <span class="text-sm font-bold text-slate-700" id="edgeText">Edge: 2.7 points</span>
+                                    <div class="mt-4 inline-flex items-center justify-center bg-slate-900 border border-slate-800 rounded-full px-4 py-1.5">
+                                        <span class="text-lg mr-2" id="edgeIcon">🔥</span>
+                                        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider" id="edgeText">Edge: 2.7 pts</span>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="mt-auto px-6 text-center">
-                                <p class="text-[10px] text-slate-400 font-medium">Simulated Data • For illustrative purposes</p>
+                                <p class="text-[9px] text-slate-600 font-medium uppercase tracking-widest">Simulated Data Mode</p>
                             </div>
                         </div>
                     </div>
@@ -252,25 +258,25 @@
     </section>
 
     <!-- Performance Section -->
-    <section id="performance" class="py-20 bg-slate-50 border-t border-slate-200">
+    <section id="performance" class="py-20 bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-emerald-600 font-bold tracking-wide uppercase text-sm mb-2">Proven Results</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Consistent Returns Over Time.</h3>
-                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-                    We don't guarantee wins on every game, but we guarantee a mathematical edge. Here is the simulated cumulative profit (in units) of our NCAA basketball model over a standard season targeting a >54% win rate.
+                <h2 class="text-yellow-500 font-bold tracking-widest uppercase text-xs mb-3">Proven Results</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-white">Consistent Returns.</h3>
+                <p class="mt-4 text-lg text-slate-400 max-w-2xl mx-auto">
+                    We don't guarantee wins on every game, but we guarantee a mathematical edge. Simulated cumulative profit of our NCAA basketball model over a standard season.
                 </p>
             </div>
 
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-100 max-w-4xl mx-auto">
-                <div class="flex justify-between items-end mb-6">
+            <div class="bg-slate-950 p-6 md:p-8 rounded-3xl shadow-2xl border border-slate-800 max-w-4xl mx-auto">
+                <div class="flex justify-between items-end mb-8 border-b border-slate-800 pb-6">
                     <div>
-                        <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Total Season Profit</p>
-                        <p class="text-4xl font-black text-emerald-600">+42.5 Units</p>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Total Season Profit</p>
+                        <p class="text-4xl md:text-5xl font-black text-yellow-400">+42.5 Units</p>
                     </div>
                     <div class="text-right hidden sm:block">
-                        <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Win Rate</p>
-                        <p class="text-2xl font-bold text-slate-800">56.2%</p>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Win Rate Target</p>
+                        <p class="text-3xl font-bold text-white">56.2%</p>
                     </div>
                 </div>
                 
@@ -279,63 +285,62 @@
                     <canvas id="performanceChart"></canvas>
                 </div>
                 
-                <p class="text-center text-xs text-slate-400 mt-6">*Simulated backtested data for NCAA Men's Basketball (Nov-March). 1 Unit = Standard Bet Size.</p>
+                <p class="text-center text-[10px] text-slate-600 uppercase tracking-widest mt-6 font-bold">*Simulated backtested data for NCAA Men's Basketball. 1 Unit = Standard Bet Size.</p>
             </div>
         </div>
     </section>
 
     <!-- Supported Sports Grid -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-slate-950 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-2xl font-bold text-slate-900 mb-8 text-center">Coverage Map</h3>
+            <h3 class="text-2xl font-bold text-white mb-10 text-center">Platform Coverage</h3>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <!-- Basketball (Active) -->
-                <div class="bg-emerald-50 rounded-xl p-6 border-2 border-emerald-500 shadow-sm relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 text-7xl opacity-10">🏀</div>
-                    <div class="inline-block bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider mb-3">Live Now</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-1">Basketball</h4>
-                    <p class="text-sm font-medium text-emerald-700 mb-4">NCAA Men's & Women's</p>
-                    <ul class="text-sm text-slate-600 space-y-2">
-                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Money Line</li>
-                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Spread</li>
+                <div class="bg-slate-900 rounded-2xl p-6 border border-yellow-500/50 shadow-[0_0_20px_rgba(234,179,8,0.1)] relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-7xl opacity-5 grayscale">🏀</div>
+                    <div class="inline-block bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest mb-4">Live Now</div>
+                    <h4 class="text-xl font-bold text-white mb-1">Basketball</h4>
+                    <p class="text-xs font-bold text-yellow-500 uppercase tracking-wider mb-5">NCAA Men's & Women's</p>
+                    <ul class="text-sm text-slate-400 space-y-3 font-medium">
+                        <li class="flex items-center"><span class="text-yellow-500 mr-2 text-lg leading-none">•</span> Money Line</li>
+                        <li class="flex items-center"><span class="text-yellow-500 mr-2 text-lg leading-none">•</span> Spread</li>
                     </ul>
                 </div>
 
                 <!-- Football (Coming Soon) -->
-                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 relative overflow-hidden group hover:border-slate-300 transition-colors">
-                    <div class="absolute -right-4 -top-4 text-7xl opacity-5 group-hover:opacity-10 transition-opacity">🏈</div>
-                    <div class="inline-block bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider mb-3">In Development</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-1">Football</h4>
-                    <p class="text-sm font-medium text-slate-500 mb-4">NFL & NCAA</p>
-                    <ul class="text-sm text-slate-400 space-y-2">
-                        <li>• Money Line</li>
-                        <li>• Spread</li>
-                        <li>• Fantasy Projections</li>
+                <div class="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-7xl opacity-5 grayscale group-hover:opacity-10 transition-opacity">🏈</div>
+                    <div class="inline-block bg-slate-800 text-slate-400 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest mb-4">Development</div>
+                    <h4 class="text-xl font-bold text-slate-300 mb-1">Football</h4>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-5">NFL & NCAA</p>
+                    <ul class="text-sm text-slate-600 space-y-3 font-medium">
+                        <li class="flex items-center"><span class="mr-2 text-lg leading-none">•</span> Money Line</li>
+                        <li class="flex items-center"><span class="mr-2 text-lg leading-none">•</span> Spread</li>
                     </ul>
                 </div>
 
                 <!-- Soccer (Coming Soon) -->
-                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 relative overflow-hidden group hover:border-slate-300 transition-colors">
-                    <div class="absolute -right-4 -top-4 text-7xl opacity-5 group-hover:opacity-10 transition-opacity">⚽</div>
-                    <div class="inline-block bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider mb-3">Roadmap</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-1">Soccer</h4>
-                    <p class="text-sm font-medium text-slate-500 mb-4">Premier League, MLS</p>
-                    <ul class="text-sm text-slate-400 space-y-2">
-                        <li>• Money Line (3-way)</li>
-                        <li>• Asian Handicap</li>
+                <div class="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-7xl opacity-5 grayscale group-hover:opacity-10 transition-opacity">⚽</div>
+                    <div class="inline-block bg-slate-800 text-slate-400 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest mb-4">Roadmap</div>
+                    <h4 class="text-xl font-bold text-slate-300 mb-1">Soccer</h4>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-5">Premier League</p>
+                    <ul class="text-sm text-slate-600 space-y-3 font-medium">
+                        <li class="flex items-center"><span class="mr-2 text-lg leading-none">•</span> 3-Way ML</li>
+                        <li class="flex items-center"><span class="mr-2 text-lg leading-none">•</span> Asian Handicap</li>
                     </ul>
                 </div>
 
                 <!-- Baseball (Coming Soon) -->
-                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 relative overflow-hidden group hover:border-slate-300 transition-colors">
-                    <div class="absolute -right-4 -top-4 text-7xl opacity-5 group-hover:opacity-10 transition-opacity">⚾</div>
-                    <div class="inline-block bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider mb-3">Roadmap</div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-1">Baseball</h4>
-                    <p class="text-sm font-medium text-slate-500 mb-4">MLB</p>
-                    <ul class="text-sm text-slate-400 space-y-2">
-                        <li>• Money Line</li>
-                        <li>• Run Line</li>
+                <div class="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-7xl opacity-5 grayscale group-hover:opacity-10 transition-opacity">⚾</div>
+                    <div class="inline-block bg-slate-800 text-slate-400 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest mb-4">Roadmap</div>
+                    <h4 class="text-xl font-bold text-slate-300 mb-1">Baseball</h4>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-5">MLB</p>
+                    <ul class="text-sm text-slate-600 space-y-3 font-medium">
+                        <li class="flex items-center"><span class="mr-2 text-lg leading-none">•</span> Money Line</li>
+                        <li class="flex items-center"><span class="mr-2 text-lg leading-none">•</span> Run Line</li>
                     </ul>
                 </div>
             </div>
@@ -343,94 +348,136 @@
     </section>
 
     <!-- Pricing Section -->
-    <section id="pricing" class="py-24 bg-slate-900">
+    <section id="pricing" class="py-24 bg-slate-900 relative">
+        <!-- Background accents -->
+        <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-yellow-500/20 to-transparent"></div>
+        <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">Simple Pricing. Infinite Upside.</h2>
-                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
-                    One flat rate per sport. No hidden tiers, no confusing credits. Just straight data.
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">Simple Pricing. <span class="text-yellow-500">Infinite Upside.</span></h2>
+                <p class="text-lg text-slate-400 max-w-2xl mx-auto">
+                    Choose the plan that fits your betting style. No hidden fees. Cancel anytime.
                 </p>
             </div>
 
-            <div class="max-w-lg mx-auto">
-                <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-2xl relative">
-                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-emerald-500 to-emerald-400 text-white font-bold px-6 py-2 rounded-full text-sm shadow-lg border-4 border-slate-900">
-                        MOST POPULAR
-                    </div>
-                    
-                    <div class="text-center mb-8 mt-4">
-                        <h3 class="text-2xl font-bold text-slate-900">Single Sport Pass</h3>
-                        <div class="mt-4 flex items-center justify-center">
-                            <span class="text-5xl font-black text-slate-900">$25</span>
-                            <span class="text-xl text-slate-500 font-medium ml-2">/ month</span>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-center">
+                
+                <!-- Tier 1: Single Sport -->
+                <div class="bg-slate-950 rounded-3xl p-8 border border-slate-800 shadow-xl order-2 md:order-1">
+                    <div class="text-center mb-8">
+                        <h3 class="text-xl font-bold text-white uppercase tracking-wider">Single Sport</h3>
+                        <div class="mt-4 flex items-end justify-center">
+                            <span class="text-5xl font-black text-white">$25</span>
+                            <span class="text-lg text-slate-500 font-medium ml-1 mb-1">/ mo</span>
                         </div>
-                        <p class="mt-2 text-sm text-slate-500">Billed monthly. Cancel anytime.</p>
+                        <p class="mt-3 text-sm text-slate-500">Perfect for the focused bettor.</p>
                     </div>
 
-                    <ul class="space-y-4 mb-8">
+                    <ul class="space-y-4 mb-8 text-slate-300 text-sm font-medium">
                         <li class="flex items-start">
-                            <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></span>
-                            <span class="text-slate-700">Access to all NCAAB predictions</span>
+                            <span class="text-yellow-500 mr-3 text-lg leading-none">✓</span>
+                            <span>Access to <strong>one</strong> selected sport (e.g. NCAAB)</span>
                         </li>
                         <li class="flex items-start">
-                            <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></span>
-                            <span class="text-slate-700">Money Line & Spread edges</span>
+                            <span class="text-yellow-500 mr-3 text-lg leading-none">✓</span>
+                            <span>Money Line & Spread edges</span>
                         </li>
                         <li class="flex items-start">
-                            <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></span>
-                            <span class="text-slate-700">Daily slate updates & confidence scores</span>
+                            <span class="text-yellow-500 mr-3 text-lg leading-none">✓</span>
+                            <span>Daily slate updates</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-3 mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></span>
-                            <span class="text-slate-700">No math or coding required</span>
+                        <li class="flex items-start opacity-40">
+                            <span class="text-slate-600 mr-3 text-lg leading-none">✕</span>
+                            <span>Cross-sport arbitrage alerts</span>
                         </li>
                     </ul>
 
-                    <button class="w-full bg-slate-900 text-white font-bold text-lg py-4 rounded-xl hover:bg-slate-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-200">
-                        Subscribe Now
+                    <button class="w-full bg-slate-800 text-white font-bold py-3.5 rounded-xl hover:bg-slate-700 border border-slate-700 transition-colors">
+                        Select Plan
                     </button>
-                    <p class="text-center text-xs text-slate-400 mt-4">Secure payment processed via Stripe.</p>
                 </div>
+
+                <!-- Tier 2: All Access (Highlighted) -->
+                <div class="bg-slate-800 rounded-3xl p-8 border-2 border-yellow-500 shadow-[0_0_30px_rgba(234,179,8,0.15)] relative order-1 md:order-2 transform md:-translate-y-4">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-500 text-slate-950 font-black px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest shadow-lg">
+                        Best Value
+                    </div>
+                    
+                    <div class="text-center mb-8 mt-2">
+                        <h3 class="text-2xl font-black text-yellow-400 uppercase tracking-wider">All-Access Pass</h3>
+                        <div class="mt-4 flex items-end justify-center">
+                            <span class="text-6xl font-black text-white">$100</span>
+                            <span class="text-lg text-yellow-500/70 font-medium ml-1 mb-1.5">/ mo</span>
+                        </div>
+                        <p class="mt-3 text-sm text-slate-300">Total coverage across all active models.</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-8 text-white text-sm font-medium">
+                        <li class="flex items-start">
+                            <span class="bg-yellow-500 text-slate-900 rounded-full p-0.5 mr-3 mt-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg></span>
+                            <span>Access to <strong>ALL</strong> current and future sports</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-yellow-500 text-slate-900 rounded-full p-0.5 mr-3 mt-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg></span>
+                            <span>Money Line, Spread, & Totals (where avail.)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-yellow-500 text-slate-900 rounded-full p-0.5 mr-3 mt-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg></span>
+                            <span>Priority line-movement alerts</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-yellow-500 text-slate-900 rounded-full p-0.5 mr-3 mt-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg></span>
+                            <span>Early access to beta models (NFL/Soccer)</span>
+                        </li>
+                    </ul>
+
+                    <button class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-950 font-black text-lg py-4 rounded-xl hover:from-yellow-300 hover:to-yellow-500 transition-all shadow-lg transform hover:-translate-y-1 duration-200">
+                        Subscribe All-Access
+                    </button>
+                </div>
+
             </div>
+            <p class="text-center text-xs text-slate-500 mt-10 font-medium uppercase tracking-widest">Secure payments via Stripe. Cancel anytime in portal.</p>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+    <footer class="bg-slate-950 text-slate-500 py-12 border-t border-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="col-span-1 md:col-span-2">
                 <div class="flex items-center gap-2 mb-4">
-                    <span class="text-2xl">🎲</span>
-                    <span class="font-bold text-xl tracking-tight text-white">Better Bettor</span>
+                    <span class="text-2xl opacity-80">🎲</span>
+                    <span class="font-bold text-xl tracking-tight text-slate-300">Better Bettor</span>
                 </div>
-                <p class="text-sm max-w-sm mb-6 text-slate-500">
+                <p class="text-sm max-w-sm mb-6 text-slate-600">
                     Advanced ML and AI products for consumers who want an edge against an increasingly analytical house.
                 </p>
-                <p class="text-xs text-slate-600">
+                <p class="text-[10px] text-slate-700 uppercase tracking-widest leading-relaxed font-bold">
                     Disclaimer: Better Bettor provides data and analytics for informational purposes only. We do not accept bets or handle money. Sports betting involves risk. Please gamble responsibly.
                 </p>
             </div>
             
             <div>
-                <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Product</h4>
+                <h4 class="text-slate-300 font-bold mb-4 uppercase text-xs tracking-widest">Product</h4>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">NCAAB Model</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Methodology</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Pricing</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition-colors">NCAAB Model</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition-colors">Methodology</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
                 </ul>
             </div>
             
             <div>
-                <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Company</h4>
+                <h4 class="text-slate-300 font-bold mb-4 uppercase text-xs tracking-widest">Company</h4>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">About Us</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Contact</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Terms of Service</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition-colors">About Us</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition-colors">Contact</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
                 </ul>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-sm text-slate-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-900 text-center text-xs text-slate-700 font-bold uppercase tracking-widest">
             &copy; 2026 Better Bettor Analytics. All rights reserved.
         </div>
     </footer>
@@ -442,26 +489,30 @@
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Navbar Scroll Effect
+        // Navbar Scroll Effect (Dark Theme logic)
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 20) {
-                nav.classList.add('shadow-md', 'bg-white/95');
-                nav.classList.remove('bg-white/70');
+                nav.style.background = 'rgba(2, 6, 23, 0.95)'; // slate-950 nearly solid
+                nav.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
             } else {
-                nav.classList.remove('shadow-md', 'bg-white/95');
-                nav.classList.add('bg-white/70');
+                nav.style.background = 'rgba(15, 23, 42, 0.8)'; // slate-900 with more transparency
+                nav.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
             }
         });
 
         // --- Chart: Historical Performance (Line Chart) ---
-        // Goal: Build consumer trust by showing simulated positive returns.
+        // Goal: Build consumer trust by showing simulated positive returns. Matches Gold theme.
         document.addEventListener('DOMContentLoaded', function() {
             const ctxPerf = document.getElementById('performanceChart').getContext('2d');
             
-            // Generate mock cumulative profit data (simulating a season of betting 1 unit per recommended game)
             const labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12', 'Week 13', 'Week 14', 'Week 15', 'Week 16'];
             const dataPoints = [0, 2.5, 1.2, 5.8, 8.4, 7.1, 12.5, 15.2, 14.0, 19.5, 24.2, 22.8, 29.5, 34.1, 38.6, 42.5];
+
+            // Create gradient for under the line
+            let gradient = ctxPerf.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(234, 179, 8, 0.2)'); // Yellow 500
+            gradient.addColorStop(1, 'rgba(234, 179, 8, 0)');
 
             new Chart(ctxPerf, {
                 type: 'line',
@@ -470,16 +521,16 @@
                     datasets: [{
                         label: 'Cumulative Units Won',
                         data: dataPoints,
-                        borderColor: '#10b981', // Emerald 500
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)', // Light Emerald fill
+                        borderColor: '#eab308', // yellow-500
+                        backgroundColor: gradient,
                         borderWidth: 3,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#10b981',
+                        pointBackgroundColor: '#020617', // slate-950
+                        pointBorderColor: '#eab308',
                         pointBorderWidth: 2,
                         pointRadius: 4,
                         pointHoverRadius: 6,
                         fill: true,
-                        tension: 0.4 // Smooth curves
+                        tension: 0.4 
                     }]
                 },
                 options: {
@@ -492,13 +543,18 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#1e293b',
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)', // slate-900
+                            titleColor: '#94a3b8',
+                            bodyColor: '#facc15', // yellow-400
+                            borderColor: '#334155',
+                            borderWidth: 1,
                             padding: 12,
-                            titleFont: { size: 14, family: 'Inter' },
-                            bodyFont: { size: 14, family: 'Inter', weight: 'bold' },
+                            titleFont: { size: 12, family: 'Inter', weight: 'bold' },
+                            bodyFont: { size: 16, family: 'Inter', weight: 'bold' },
+                            displayColors: false,
                             callbacks: {
                                 label: function(context) {
-                                    return ` Profit: +${context.raw} Units`;
+                                    return `Profit: +${context.raw} Units`;
                                 }
                             }
                         }
@@ -506,9 +562,10 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            title: { display: true, text: 'Units Profit', color: '#64748b', font: { weight: 'bold' } },
-                            grid: { color: '#f1f5f9' },
+                            title: { display: true, text: 'UNITS PROFIT', color: '#64748b', font: { weight: 'bold', size: 10 } },
+                            grid: { color: '#1e293b' }, // slate-800
                             ticks: {
+                                color: '#94a3b8',
                                 callback: function(value) {
                                     return '+' + value;
                                 }
@@ -516,7 +573,7 @@
                         },
                         x: {
                             grid: { display: false },
-                            ticks: { color: '#94a3b8' }
+                            ticks: { color: '#64748b', font: { size: 10 } }
                         }
                     }
                 }
@@ -547,7 +604,6 @@
             const vegasSpread = parseFloat(spreadSlider.value);
             const modelSpread = selectedMatchup.modelSpread;
             
-            // Format spreads to ensure +/- is always shown properly
             const formatSpread = (val) => val > 0 ? `+${val.toFixed(1)}` : val.toFixed(1);
 
             // Update UI Text
@@ -558,7 +614,6 @@
             displayModel.textContent = formatSpread(modelSpread);
 
             // Logic: Compare Model to Vegas
-            // Diff = absolute difference between the lines.
             let diff = modelSpread - vegasSpread;
             let absDiff = Math.abs(diff);
             
@@ -569,29 +624,26 @@
 
             // Determine Recommendation
             if (absDiff < 1.0) {
-                // Too close to call, no edge
                 recText = "NO PLAY / PASS";
-                recClass = "bg-slate-200 text-slate-500 border-slate-300";
+                recClass = "bg-slate-800 text-slate-500 border-slate-700";
                 icon = "⏸️";
-                edgeVal = "None (Line is accurate)";
+                edgeVal = "None (Line Accurate)";
             } else {
-                // If diff is negative, model thinks Team 1 (Away) will perform better than Vegas expects
-                // If diff is positive, model thinks Team 2 (Home) will perform better than Vegas expects
                 if (diff < 0) {
                     recText = `BET ${selectedMatchup.t1} ${formatSpread(vegasSpread)}`;
                 } else {
                     recText = `BET ${selectedMatchup.t2} ${formatSpread(-vegasSpread)}`;
                 }
 
-                // Visual styling based on edge size
+                // Dark mode styling for recommendation
                 if (absDiff >= 3.0) {
-                    recClass = "bg-emerald-500 text-white border-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.5)]";
+                    recClass = "bg-yellow-500 text-slate-950 border-yellow-400 shadow-[0_0_20px_rgba(234,179,8,0.3)]";
                     icon = "🔥";
                 } else {
-                    recClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
+                    recClass = "bg-slate-800 text-yellow-400 border-yellow-500/30";
                     icon = "✅";
                 }
-                edgeVal = `${edgeVal} points`;
+                edgeVal = `${edgeVal} pts`;
             }
 
             // Apply updates
