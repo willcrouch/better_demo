@@ -8,6 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- KaTeX for LaTeX rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0KOVEMckDpbDM7iiJa5VI8dcsc9mbNs5YTY5evwingEGviDGMNMfDL" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     
@@ -280,39 +284,6 @@
         </div>
     </section>
 
-    <!-- Performance Section -->
-    <section id="performance" class="py-20 bg-slate-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-yellow-500 font-bold tracking-widest uppercase text-xs mb-3">Proven Results</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-white">Consistent Returns.</h3>
-                <p class="mt-4 text-lg text-slate-400 max-w-2xl mx-auto">
-                    We don't guarantee wins on every game, but we guarantee a mathematical edge. Simulated cumulative profit of our NCAA basketball model over a standard season.
-                </p>
-            </div>
-
-            <div class="bg-slate-950 p-6 md:p-8 rounded-3xl shadow-2xl border border-slate-800 max-w-4xl mx-auto">
-                <div class="flex justify-between items-end mb-8 border-b border-slate-800 pb-6">
-                    <div>
-                        <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Total Season Profit</p>
-                        <p class="text-4xl md:text-5xl font-black text-yellow-400">+42.5 Units</p>
-                    </div>
-                    <div class="text-right hidden sm:block">
-                        <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Win Rate Target</p>
-                        <p class="text-3xl font-bold text-white">56.2%</p>
-                    </div>
-                </div>
-                
-                <!-- Chart Container -->
-                <div class="chart-container">
-                    <canvas id="performanceChart"></canvas>
-                </div>
-                
-                <p class="text-center text-[10px] text-slate-600 uppercase tracking-widest mt-6 font-bold">*Simulated backtested data for NCAA Men's Basketball. 1 Unit = Standard Bet Size.</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Supported Sports Grid -->
     <section class="py-20 bg-slate-950 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -474,6 +445,29 @@
             </div>
             <div class="space-y-8">
                 <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                    <h4 class="text-lg font-bold text-white mb-2">What is Elo?</h4>
+                    <div class="text-slate-400 space-y-4">
+                        <p>The Elo rating system was originally invented by Arpad Elo to calculate the relative skill levels of chess players. It's a method of comparing players' strengths in head-to-head competition based on wins and losses.</p>
+                        <p>Its principles were later adapted for sports analytics, with Baseball Prospectus using it for their PECOTA player projection system. Nate Silver's FiveThirtyEight then popularized Elo for predicting game outcomes in the NBA and other professional sports.</p>
+                        <div class="pt-2">
+                            <h5 class="text-sm font-bold text-slate-300 mb-2 uppercase tracking-wider">Standard Elo Formulas</h5>
+                            <p>The system calculates an expected score (E) for each team based on their current ratings (R). It then updates their rating (R') based on the actual score (S) versus the expectation.</p>
+                            <div class="my-3 text-left text-base space-y-4 bg-slate-950/50 p-4 rounded-lg border border-slate-800">
+                                <div>$$ E_A = \frac{1}{1 + 10^{(R_B - R_A) / 400}} $$</div>
+                                <div>$$ E_B = \frac{1}{1 + 10^{(R_A - R_B) / 400}} $$</div>
+                                <div>$$ R'_A = R_A + K \cdot (S_A - E_A) $$</div>
+                                <div>$$ R'_B = R_B + K \cdot (S_B - E_B) $$</div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-2">Where S is the actual score (1 for a win, 0.5 for a draw, 0 for a loss), and K is a constant that determines rating volatility.</p>
+                        </div>
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-300 mb-2 uppercase tracking-wider">Custom Margin of Victory Modifier</h5>
+                            <p>To account for not just winning, but the margin of victory (MOV), we use a custom multiplier for the K-factor. The constants in this formula have been backtested and optimized specifically for NCAA Men's Basketball to improve predictive accuracy.</p>
+                            <div class="my-3 text-center text-base bg-slate-950/50 p-4 rounded-lg border border-slate-800">$$\text{MOV Multiplier} = \frac{(|MOV_{winner}| + 3)^{0.8}}{7.5 + 0.006 \cdot (R_{winner} - R_{loser})}$$</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
                     <h4 class="text-lg font-bold text-white mb-2">How often are spreads updated?</h4>
                     <p class="text-slate-400">Our models run continuously. As soon as Vegas lines move or new injury data becomes available, our "True Spread" is recalculated instantly.</p>
                 </div>
@@ -548,82 +542,16 @@
             }
         });
 
-        // --- Chart: Historical Performance (Line Chart) ---
-        // Goal: Build consumer trust by showing simulated positive returns. Matches Gold theme.
+        // --- KaTeX: Render LaTeX Math ---
         document.addEventListener('DOMContentLoaded', function() {
-            const ctxPerf = document.getElementById('performanceChart').getContext('2d');
-            
-            const labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12', 'Week 13', 'Week 14', 'Week 15', 'Week 16'];
-            const dataPoints = [0, 2.5, 1.2, 5.8, 8.4, 7.1, 12.5, 15.2, 14.0, 19.5, 24.2, 22.8, 29.5, 34.1, 38.6, 42.5];
-
-            // Create gradient for under the line
-            let gradient = ctxPerf.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(234, 179, 8, 0.2)'); // Yellow 500
-            gradient.addColorStop(1, 'rgba(234, 179, 8, 0)');
-
-            new Chart(ctxPerf, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Cumulative Units Won',
-                        data: dataPoints,
-                        borderColor: '#eab308', // yellow-500
-                        backgroundColor: gradient,
-                        borderWidth: 3,
-                        pointBackgroundColor: '#020617', // slate-950
-                        pointBorderColor: '#eab308',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        fill: true,
-                        tension: 0.4 
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(15, 23, 42, 0.9)', // slate-900
-                            titleColor: '#94a3b8',
-                            bodyColor: '#facc15', // yellow-400
-                            borderColor: '#334155',
-                            borderWidth: 1,
-                            padding: 12,
-                            titleFont: { size: 12, family: 'Inter', weight: 'bold' },
-                            bodyFont: { size: 16, family: 'Inter', weight: 'bold' },
-                            displayColors: false,
-                            callbacks: {
-                                label: function(context) {
-                                    return `Profit: +${context.raw} Units`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: 'UNITS PROFIT', color: '#64748b', font: { weight: 'bold', size: 10 } },
-                            grid: { color: '#1e293b' }, // slate-800
-                            ticks: {
-                                color: '#94a3b8',
-                                callback: function(value) {
-                                    return '+' + value;
-                                }
-                            }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#64748b', font: { size: 10 } }
-                        }
-                    }
-                }
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                throwOnError : false
             });
         });
 
@@ -775,7 +703,8 @@
                                 status: game.status.includes("PM") || game.status.includes("AM") ? 'Scheduled' : game.status,
                                 vegasSpread: parseVegasSpread(game.spread, game.home_abbr, game.away_abbr),
                                 eloModelSpread: parseModelSpread(game.elo_spread, game.home_abbr, game.away_abbr),
-                                mlModelSpread: parseModelSpread(game.rf_predict, game.home_abbr, game.away_abbr)
+                                mlModelSpread: parseModelSpread(game.rf_predict, game.home_abbr, game.away_abbr),
+                                odds_link: game.odds_link
                             };
                         })
                         .filter(game => game.vegasSpread !== null && (game.eloModelSpread !== null || game.mlModelSpread !== null)) // Filter if at least one model has data
@@ -857,7 +786,13 @@
                                 <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Spread</p>
                                 <div class="grid grid-cols-4 gap-x-2 text-center font-mono text-sm bg-slate-950/50 p-2 rounded-lg border border-slate-800/50">
                                     <div class="text-slate-400 font-sans font-bold text-xs uppercase text-left">Team</div>
-                                    <div class="text-slate-400 font-sans font-bold text-xs uppercase">Vegas</div>
+                                    ${game.odds_link ?
+                                        `<a href="${game.odds_link}" target="_blank" rel="noopener noreferrer" class="text-slate-400 font-sans font-bold text-xs uppercase hover:text-yellow-400 transition-colors flex items-center justify-center gap-1">
+                                            Vegas
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path></svg>
+                                        </a>` :
+                                        `<div class="text-slate-400 font-sans font-bold text-xs uppercase">Vegas</div>`
+                                    }
                                     <div class="text-slate-400 font-sans font-bold text-xs uppercase">Elo</div>
                                     <div class="text-slate-400 font-sans font-bold text-xs uppercase">ML</div>
                                     <div class="text-white font-sans font-bold text-left py-1">${game.awayTeam.short}</div>
@@ -871,9 +806,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-auto p-3 text-center ${edgeBgColor} ${edgeBorderColor}">
-                            <p class="text-[10px] font-bold ${edgeTextColor} uppercase tracking-widest">Edge: ${edge.toFixed(1)} pts</p>
-                            <p class="font-bold text-base ${edgeTextColor}">${recommendedBet}</p>
+                        <div class="mt-auto p-4 text-center ${edgeBgColor} ${edgeBorderColor}">
+                            <p class="font-bold text-lg ${edgeTextColor}">${recommendedBet}</p>
+                            ${game.odds_link ?
+                                `<a href="${game.odds_link}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center justify-center gap-1.5 text-xs font-bold text-slate-400 hover:text-yellow-400 hover:underline transition-colors">
+                                    <span>Bet on DraftKings</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path></svg>
+                                </a>` : ''
+                            }
                         </div>
                     `;
                     grid.appendChild(card);
