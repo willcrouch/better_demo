@@ -708,6 +708,45 @@
         updateSimulation();
 
         // --- Live Spreads Data Fetching ---
+        /**
+         * Parses a Vegas spread string (e.g., "TEAM -5.5") into a number from the home team's perspective.
+         * @param {string} spreadStr - The spread string from the API.
+         * @param {string} homeAbbr - The home team's abbreviation.
+         * @param {string} awayAbbr - The away team's abbreviation.
+         * @returns {number|null} The parsed spread or null if invalid.
+         */
+        function parseVegasSpread(spreadStr, homeAbbr, awayAbbr) {
+            if (typeof spreadStr !== 'string' || spreadStr.toUpperCase() === 'NA') return null;
+            const parts = spreadStr.split(' ');
+            const teamAbbr = parts[0];
+            const spreadValue = parseFloat(parts[parts.length - 1]);
+            if (isNaN(spreadValue)) return null;
+
+            if (teamAbbr === homeAbbr) return spreadValue; // e.g., "MIA -3.5", MIA is home -> -3.5
+            if (teamAbbr === awayAbbr) return -spreadValue; // e.g., "NYJ -3.5", NYJ is away -> +3.5 for home team
+            return null;
+        }
+
+        /**
+         * Parses a model spread string (e.g., "TEAM: -5.5") into a number from the home team's perspective.
+         * @param {string} spreadStr - The model spread string from the API.
+         * @param {string} homeAbbr - The home team's abbreviation.
+         * @param {string} awayAbbr - The away team's abbreviation.
+         * @returns {number|null} The parsed spread or null if invalid.
+         */
+        function parseModelSpread(spreadStr, homeAbbr, awayAbbr) {
+            if (typeof spreadStr !== 'string' || spreadStr.toUpperCase() === 'NA') return null;
+            const parts = spreadStr.split(':');
+            if (parts.length < 2) return null;
+            const teamAbbr = parts[0].trim();
+            const spreadValue = parseFloat(parts[1]);
+            if (isNaN(spreadValue)) return null;
+
+            if (teamAbbr === homeAbbr) return spreadValue;
+            if (teamAbbr === awayAbbr) return -spreadValue;
+            return null;
+        }
+
         function renderLiveSpreads() {
             const grid = document.getElementById('games-grid');
             const lastUpdated = document.getElementById('lastUpdated');
@@ -724,10 +763,24 @@
                     grid.innerHTML = ''; // Clear loading state
                     lastUpdated.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                    // Filter out games with incomplete data (null spreads) before processing
-                    const validApiData = apiData.filter(game => game.spread !== null && game.elo_spread !== null);
+                    // Map API data to a clean, usable format, parsing the complex spread strings.
+                    const gamesData = apiData
+                        .map(game => {
+                            const gameDate = new Date(game.time_display);
+                            return {
+                                awayTeam: { name: game.away_team, short: game.away_abbr },
+                                homeTeam: { name: game.home_team, short: game.home_abbr },
+                                gameDate: gameDate,
+                                displayTime: gameDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
+                                status: game.status.includes("PM") || game.status.includes("AM") ? 'Scheduled' : game.status,
+                                vegasSpread: parseVegasSpread(game.spread, game.home_abbr, game.away_abbr),
+                                modelSpread: parseModelSpread(game.elo_spread, game.home_abbr, game.away_abbr)
+                            };
+                        })
+                        .filter(game => game.vegasSpread !== null && game.modelSpread !== null) // Now filter based on successfully parsed data
+                        .sort((a, b) => a.gameDate - b.gameDate);
 
-                    if (validApiData.length === 0) {
+                if (gamesData.length === 0) {
                         grid.innerHTML = `<div class="col-span-full text-center py-12">
                                             <p class="text-slate-400 font-bold">No games on the slate for today.</p>
                                             <p class="text-slate-500 mt-1">Please check back later.</p>
@@ -735,34 +788,7 @@
                         return;
                     }
 
-                    // Map API data to the format our cards expect
-                    const gamesData = validApiData.map(game => {
-                        // Helper to generate a short name (e.g., "Michigan St" -> "MS")
-                        const getShortName = (name) => {
-                            const parts = name.split(' ');
-                            if (parts.length > 1) {
-                                return (parts[0][0] + (parts[1][0] || '')).toUpperCase();
-                            }
-                            return name.substring(0, 3).toUpperCase();
-                        };
-
-                        return {
-                            awayTeam: {
-                                name: game.away_team,
-                                short: getShortName(game.away_team),
-                            },
-                            homeTeam: {
-                                name: game.home_team,
-                                short: getShortName(game.home_team),
-                            },
-                            time: game.time_display,
-                            status: 'Scheduled', // API doesn't provide live status, default to 'Scheduled'
-                            vegasSpread: parseFloat(game.spread),
-                            modelSpread: game.elo_spread // Using ELO model as requested
-                        };
-                    });
-
-                gamesData.sort((a, b) => new Date(a.time) - new Date(b.time)).forEach(game => {
+                gamesData.forEach(game => {
                     // --- 1. Calculate Edge and Recommendation ---
                     const edge = Math.abs(game.modelSpread - game.vegasSpread);
                     const diff = game.modelSpread - game.vegasSpread;
@@ -792,7 +818,7 @@
                     
                     card.innerHTML = `
                         <div class="px-4 py-2 bg-slate-950/50 border-b border-slate-800 flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-400">${game.time}</span>
+                            <span class="text-xs font-bold text-slate-400">${game.displayTime}</span>
                             <span class="text-xs font-bold uppercase px-2 py-0.5 rounded-full ${statusBg} ${statusText}">${game.status}</span>
                         </div>
                         <div class="p-4 flex-grow">
