@@ -453,10 +453,10 @@
                             <h5 class="text-sm font-bold text-slate-300 mb-2 uppercase tracking-wider">Standard Elo Formulas</h5>
                             <p>The system calculates an expected score (E) for each team based on their current ratings (R). It then updates their rating (R') based on the actual score (S) versus the expectation.</p>
                             <div class="my-3 text-left text-base space-y-4 bg-slate-950/50 p-4 rounded-lg border border-slate-800">
-                                <div>$$ E_A = \frac{1}{1 + 10^{(R_B - R_A) / 400}} $$</div>
-                                <div>$$ E_B = \frac{1}{1 + 10^{(R_A - R_B) / 400}} $$</div>
-                                <div>$$ R'_A = R_A + K \cdot (S_A - E_A) $$</div>
-                                <div>$$ R'_B = R_B + K \cdot (S_B - E_B) $$</div>
+                                <p>$$ E_A = \frac{1}{1 + 10^{(R_B - R_A) / 400}} $$</p>
+                                <p>$$ E_B = \frac{1}{1 + 10^{(R_A - R_B) / 400}} $$</p>
+                                <p>$$ R'_A = R_A + K \cdot (S_A - E_A) $$</p>
+                                <p>$$ R'_B = R_B + K \cdot (S_B - E_B) $$</p>
                             </div>
                             <p class="text-xs text-slate-500 mt-2">Where S is the actual score (1 for a win, 0.5 for a draw, 0 for a loss), and K is a constant that determines rating volatility.</p>
                         </div>
