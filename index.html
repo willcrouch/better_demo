@@ -750,7 +750,7 @@
         function renderLiveSpreads() {
             const grid = document.getElementById('games-grid');
             const lastUpdated = document.getElementById('lastUpdated');
-            const formatSpread = (val) => val > 0 ? `+${val.toFixed(1)}` : val.toFixed(1);
+            const formatSpread = (val) => val === null || typeof val === 'undefined' || isNaN(val) ? 'N/A' : (val > 0 ? `+${val.toFixed(1)}` : val.toFixed(1));
             
             fetch('https://apps.willcrouch.com/api/dailyprediction')
                 .then(response => {
@@ -774,10 +774,11 @@
                                 displayTime: gameDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
                                 status: game.status.includes("PM") || game.status.includes("AM") ? 'Scheduled' : game.status,
                                 vegasSpread: parseVegasSpread(game.spread, game.home_abbr, game.away_abbr),
-                                modelSpread: parseModelSpread(game.elo_spread, game.home_abbr, game.away_abbr)
+                                eloModelSpread: parseModelSpread(game.elo_spread, game.home_abbr, game.away_abbr),
+                                mlModelSpread: parseModelSpread(game.rf_predict, game.home_abbr, game.away_abbr)
                             };
                         })
-                        .filter(game => game.vegasSpread !== null && game.modelSpread !== null) // Now filter based on successfully parsed data
+                        .filter(game => game.vegasSpread !== null && (game.eloModelSpread !== null || game.mlModelSpread !== null)) // Filter if at least one model has data
                         .sort((a, b) => a.gameDate - b.gameDate);
 
                 if (gamesData.length === 0) {
@@ -790,8 +791,22 @@
 
                 gamesData.forEach(game => {
                     // --- 1. Calculate Edge and Recommendation ---
-                    const edge = Math.abs(game.modelSpread - game.vegasSpread);
-                    const diff = game.modelSpread - game.vegasSpread;
+                    // Use an average of models for edge calculation, or fallback to the available one.
+                    let modelSpreadForEdge;
+                    const hasElo = game.eloModelSpread !== null;
+                    const hasMl = game.mlModelSpread !== null;
+
+                    if (hasElo && hasMl) {
+                        modelSpreadForEdge = (game.eloModelSpread + game.mlModelSpread) / 2;
+                    } else if (hasElo) {
+                        modelSpreadForEdge = game.eloModelSpread;
+                    } else {
+                        modelSpreadForEdge = game.mlModelSpread;
+                    }
+
+                    const edge = Math.abs(modelSpreadForEdge - game.vegasSpread);
+                    const diff = modelSpreadForEdge - game.vegasSpread;
+
                     let recommendedBet = '';
 
                     if (edge < 1.0) {
@@ -840,16 +855,19 @@
                             </div>
                             <div>
                                 <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Spread</p>
-                                <div class="grid grid-cols-3 gap-x-2 text-center font-mono text-sm bg-slate-950/50 p-2 rounded-lg border border-slate-800/50">
+                                <div class="grid grid-cols-4 gap-x-2 text-center font-mono text-sm bg-slate-950/50 p-2 rounded-lg border border-slate-800/50">
                                     <div class="text-slate-400 font-sans font-bold text-xs uppercase text-left">Team</div>
                                     <div class="text-slate-400 font-sans font-bold text-xs uppercase">Vegas</div>
-                                    <div class="text-slate-400 font-sans font-bold text-xs uppercase">Model</div>
+                                    <div class="text-slate-400 font-sans font-bold text-xs uppercase">Elo</div>
+                                    <div class="text-slate-400 font-sans font-bold text-xs uppercase">ML</div>
                                     <div class="text-white font-sans font-bold text-left py-1">${game.awayTeam.short}</div>
                                     <div class="text-slate-300 py-1">${formatSpread(-game.vegasSpread)}</div>
-                                    <div class="text-slate-300 py-1">${formatSpread(-game.modelSpread)}</div>
+                                    <div class="text-slate-300 py-1">${formatSpread(-game.eloModelSpread)}</div>
+                                    <div class="text-slate-300 py-1">${formatSpread(-game.mlModelSpread)}</div>
                                     <div class="text-white font-sans font-bold text-left py-1">${game.homeTeam.short}</div>
                                     <div class="text-slate-300 py-1">${formatSpread(game.vegasSpread)}</div>
-                                    <div class="text-slate-300 py-1">${formatSpread(game.modelSpread)}</div>
+                                    <div class="text-slate-300 py-1">${formatSpread(game.eloModelSpread)}</div>
+                                    <div class="text-slate-300 py-1">${formatSpread(game.mlModelSpread)}</div>
                                 </div>
                             </div>
                         </div>
