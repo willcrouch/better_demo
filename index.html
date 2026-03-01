@@ -469,22 +469,26 @@
                         </div>
                         <div>
                             <h5 class="text-sm font-bold text-slate-300 mb-2 uppercase tracking-wider">Custom Margin of Victory Modifier</h5>
-                            <p>To account for not just winning, but the margin of victory (MOV), we use a custom multiplier for the K-factor. The constants in this formula have been backtested and optimized specifically for NCAA Men's Basketball to improve predictive accuracy.</p>
+                            <p>To account for not just winning, but the margin of victory (MOV), we use a modified multiplier for the K-factor. The constants are based on 538's formula (preseneted below) have been updated for NCAA Men's Basketball to improve predictive accuracy.</p>
                             <div class="my-3 text-center text-base bg-slate-950/50 p-4 rounded-lg border border-slate-800">$$\text{MOV Multiplier} = \frac{(|MOV_{winner}| + 3)^{0.8}}{7.5 + 0.006 \cdot (R_{winner} - R_{loser})}$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
                     <h4 class="text-lg font-bold text-white mb-2">How often are spreads updated?</h4>
-                    <p class="text-slate-400">Our models run continuously. As soon as Vegas lines move or new injury data becomes available, our "True Spread" is recalculated instantly.</p>
+                    <p class="text-slate-400">The models are run daily after all games for the day have been completed.  The updates should be published around 9am ET (UTC-5/UTC-4).</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                    <h4 class="text-lg font-bold text-white mb-2">What is the ML estimate?</h4>
+                    <p class="text-slate-400">That is our first round machine learning model to be published.  Its a conserative model, so expect some big changes as new models roll out.</p>
                 </div>
                 <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
                     <h4 class="text-lg font-bold text-white mb-2">What sports do you cover?</h4>
-                    <p class="text-slate-400">Currently, we are live for NCAA Men's Basketball. We are actively developing models for NFL, NBA, and Premier League Soccer.</p>
+                    <p class="text-slate-400">Currently, we are in beta for NCAA Men's Basketball. We are actively developing models for NFL, NBA, and Premier League Soccer.</p>
                 </div>
                 <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
                     <h4 class="text-lg font-bold text-white mb-2">Is there a free trial?</h4>
-                    <p class="text-slate-400">Yes! You can use the interactive demo on the homepage to see how the model works. We also offer a 7-day money-back guarantee on all plans.</p>
+                    <p class="text-slate-400">Beta is going to be free, and once we are live, we will have some free models, like Elo.  But our proprietary models will be paywalled.</p>
                 </div>
             </div>
         </div>
