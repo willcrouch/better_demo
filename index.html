@@ -687,12 +687,12 @@
                 })
                 .then(apiData => {
                     grid.innerHTML = ''; // Clear loading state
-                    lastUpdated.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    lastUpdated.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
                     // Map API data to a clean, usable format, parsing the complex spread strings.
                     const gamesData = apiData
                         .map(game => {
-                            const gameDate = new Date(game.time_display);
+                            const gameDate = new Date(game.time_display ? game.time_display + 'Z' : null);
                             return {
                                 awayTeam: { name: game.away_team, short: game.away_abbr },
                                 homeTeam: { name: game.home_team, short: game.home_abbr },
